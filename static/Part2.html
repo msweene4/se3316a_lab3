@@ -4,18 +4,27 @@
   <title>Course Comments</title>
   <link href="comment.css" rel="stylesheet" type="text/css">
 </head>
-<body>
+<body onload = "reload()">
   <h1>SE3316</h1>
   <ul id="comments"></ul>
   <button onClick="getComms()">Get Comments</button>
-  <p>Add a comment : <input type="text" message="name"  id="save_comm"/> <button onClick="saveComm()">Save</button></p>
+  <p>Add a comment : <input type="text" message="name" maxlength="200"  id="save_comm"/> <button onClick="saveComm()">Save</button></p>
   
   <h1>SE3309</h1>
   <ul id="commentsB"></ul>
   <button onClick="getCommsB()">Get Comments</button>
-  <p>Add a comment : <input type="text" message="name"  id="save_commB"/> <button onClick="saveCommB()">Save</button></p>
+  <p>Add a comment : <input type="text" message="name" maxlength="200"  id="save_commB"/> <button onClick="saveCommB()">Save</button></p>
 </body>
 <script>
+
+  var sanitizeHtml = require('sanitize-html');
+
+//Reloads the comments list every 1s
+  function reload(){
+    var a = setInterval(getComms,1000)
+    var b = setInterval(getCommsB,1000)
+  }
+
   function createNode(element) {
       return document.createElement(element);
   }
@@ -47,8 +56,16 @@
         if(myClass.CourseCode=="SE3316"){
           span.innerHTML = myClass.message;
           span.setAttribute("title", `ID: ${myClass._id}`);
-          append(li, span);
-          append(ul, li);
+          
+          if(ul.childNodes.length>=20){
+            ul.removeChild(ul.childNodes[0]);
+            append(li, sanitizeHtml(span));
+            append(ul, li);
+          }
+          else{
+            append(li, span);
+            append(ul, li);
+          }
         }
       });
     })
@@ -86,8 +103,16 @@
         if(myClass.CourseCode=="SE3309"){
           span.innerHTML = myClass.message;
           span.setAttribute("title", `ID: ${myClass._id}`);
-          append(li, span);
-          append(ul, li);
+          
+          if(ul.childNodes.length>=20){
+            ul.removeChild(ul.childNodes[0]);
+            append(li, span);
+            append(ul, li);
+          }
+          else{
+            append(li, span);
+            append(ul, li);
+          }
         }
       });
     })
