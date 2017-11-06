@@ -1,0 +1,114 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Course Comments</title>
+  <link href="comment.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <h1>SE3316</h1>
+  <ul id="comments"></ul>
+  <button onClick="getComms()">Get Comments</button>
+  <p>Add a comment : <input type="text" message="name"  id="save_comm"/> <button onClick="saveComm()">Save</button></p>
+  
+  <h1>SE3309</h1>
+  <ul id="commentsB"></ul>
+  <button onClick="getCommsB()">Get Comments</button>
+  <p>Add a comment : <input type="text" message="name"  id="save_commB"/> <button onClick="saveCommB()">Save</button></p>
+</body>
+<script>
+  function createNode(element) {
+      return document.createElement(element);
+  }
+
+  function append(parent, el) {
+    return parent.appendChild(el);
+  }
+
+  function removeChild(root) {
+    while ( root.firstChild ) {
+      root.removeChild( root.firstChild );
+    }
+  }
+  
+  //****************************************************************SE3316
+  function getComms(){
+    const ul = document.getElementById('comments');
+    const url = 'http://lab3-msweene4.c9users.io:8081/api/SE3316';
+
+    removeChild(ul); // remove list elements if there are any
+
+    window.fetch(url)
+    .then((resp) => resp.json())
+    .then(function(data) {
+      console.log(data);
+      return data.map(function(myClass) {
+        let li = createNode('li'),
+          span = createNode('span');
+        if(myClass.CourseCode=="SE3316"){
+          span.innerHTML = myClass.message;
+          span.setAttribute("title", `ID: ${myClass._id}`);
+          append(li, span);
+          append(ul, li);
+        }
+      });
+    })
+    .catch(function(error) {
+      console.log(JSON.stringify(error));
+    });
+  }
+  
+  function saveComm() {
+    var mytext = document.getElementById('save_comm').value
+    window.fetch('http://lab3-msweene4.c9users.io:8081/api/SE3316', {
+    	method: 'POST',
+    	headers: {'Content-Type': 'application/json'},
+    	//body: 'message=' + mytext
+    	body: JSON.stringify({message: mytext})
+    })
+    .then(getComms()); // load the new list
+
+  }
+  
+  //**************************************************************SE3309
+  function getCommsB(){
+    const ul = document.getElementById('commentsB');
+    const url = 'http://lab3-msweene4.c9users.io:8081/api/SE3309';
+
+    removeChild(ul); // remove list elements if there are any
+
+    window.fetch(url)
+    .then((resp) => resp.json())
+    .then(function(data) {
+      console.log(data);
+      return data.map(function(myClass) {
+        let li = createNode('li'),
+          span = createNode('span');
+        if(myClass.CourseCode=="SE3309"){
+          span.innerHTML = myClass.message;
+          span.setAttribute("title", `ID: ${myClass._id}`);
+          append(li, span);
+          append(ul, li);
+        }
+      });
+    })
+    .catch(function(error) {
+      console.log(JSON.stringify(error));
+    });
+  }
+  
+  function saveCommB() {
+    var mytext = document.getElementById('save_commB').value
+    window.fetch('http://lab3-msweene4.c9users.io:8081/api/SE3309', {
+    	method: 'POST',
+    	headers: {'Content-Type': 'application/json'},
+    	//body: 'message=' + mytext
+    	body: JSON.stringify({message: mytext})
+    })
+    .then(getCommsB()); // load the new list
+
+  }
+  
+  getComms();
+  getCommsB();
+</script>
+</html>
