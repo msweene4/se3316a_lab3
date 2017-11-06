@@ -59,7 +59,7 @@
           
           if(ul.childNodes.length>=20){
             ul.removeChild(ul.childNodes[0]);
-            append(li, sanitizeHtml(span));
+            append(li, span);
             append(ul, li);
           }
           else{
